@@ -1,8 +1,8 @@
 require("dotenv").config();
 const express = require("express"),
       session = require("express-session"),
-      massive = require("massive");
-
+      massive = require("massive"),
+      authCtrl = require("./controllers/authController");
 
       const app = express();
 
@@ -30,6 +30,9 @@ const express = require("express"),
             //   cookie:{ maxAge: 1000 * 60 * 60 * 24 },
           })
       );
+
+      // endpoints
+      app.post("/auth/register", authCtrl.register);
 
       app.listen(PORT, () => {
           console.log(`Server listening on port: ${PORT}`)
