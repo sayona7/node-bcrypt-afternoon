@@ -2,7 +2,9 @@ require("dotenv").config();
 const express = require("express"),
       session = require("express-session"),
       massive = require("massive"),
-      authCtrl = require("./controllers/authController");
+      authCtrl = require("./controllers/authController"),
+      trCtrl = require("./controllers/treasureController"),
+      auth = require("./middleware/authMiddleware");
 
       const app = express();
 
@@ -18,9 +20,9 @@ const express = require("express"),
               rejectUnauthorized: false,
           },
       }).then((db) => {
-          app.set("db", db)
-          console.log("db connected")
-      })
+          app.set("db", db);
+          console.log("db connected");
+      });
 
       app.use(
           session({
@@ -33,6 +35,12 @@ const express = require("express"),
 
       // endpoints
       app.post("/auth/register", authCtrl.register);
+      app.post("/auth/login", authCtrl.login);
+      app.get("/auth/logout", authCtrl.logout);
+
+      app.get("/api/treasure/dragon", trCtrl.dragonTreasure);
+      app.get("/api/treasure/user", auth.usersOnly, trCtrl.getUserTreasure);
+      app.post("/api/treasure/user", auth.usersOnly, trCtrl.addUserTreasure);
 
       app.listen(PORT, () => {
           console.log(`Server listening on port: ${PORT}`)
