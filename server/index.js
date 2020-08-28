@@ -41,6 +41,7 @@ const express = require("express"),
       app.get("/api/treasure/dragon", trCtrl.dragonTreasure);
       app.get("/api/treasure/user", auth.usersOnly, trCtrl.getUserTreasure);
       app.post("/api/treasure/user", auth.usersOnly, trCtrl.addUserTreasure);
+      app.get("/api/treasure/all", auth.usersOnly, auth.adminsOnly, trCtrl.getAllTreasure);
 
       app.listen(PORT, () => {
           console.log(`Server listening on port: ${PORT}`)
